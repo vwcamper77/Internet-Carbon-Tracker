@@ -1,0 +1,19 @@
+# Ignore build output
+/output/
+/build/
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore virtual environments
+venv/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore other files
+*.log
+*.exe
