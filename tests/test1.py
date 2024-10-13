@@ -16,8 +16,8 @@ from PIL import Image, ImageTk
 import webbrowser
 
 # Constants
-CO2_PER_GB = 0.16  # Updated: CO2 emissions per GB (0.16 grams per GB)
-AVERAGE_CO2_PER_YEAR = 300_000  # 300 kg in grams
+CO2_PER_GB = 54.86  # Updated CO2 emissions per GB (54.86 grams per GB to match 200 kg/year)
+AVERAGE_CO2_PER_YEAR = 200_000  # 200 kg in grams
 personal_reduction_target = 10  # Default personal target reduction percentage
 
 # Function to get the resource path (for icons, etc.)
@@ -89,7 +89,7 @@ def init_database():
         conn.commit()
     else:
         start_date = result[0]
-    
+
     start_date_var.set(f"📅 Tracking Start Date: {start_date}")
     conn.close()
     return start_date
@@ -146,7 +146,7 @@ def track_network_usage():
             total_data_gb = total_usage_mb / 1024
 
             # Calculate CO2 emissions for this session
-            grams_per_hour = total_data_gb * CO2_PER_GB  # Adjusted to 0.16 g/GB
+            grams_per_hour = total_data_gb * CO2_PER_GB  # Adjusted to 54.86 g/GB
             current_grams_per_hour = grams_per_hour
 
             # Update the daily usage
@@ -400,3 +400,5 @@ threading.Thread(target=track_network_usage, daemon=True).start()
 threading.Thread(target=reset_daily_usage_at_midnight, daemon=True).start()
 
 root.mainloop()
+
+
