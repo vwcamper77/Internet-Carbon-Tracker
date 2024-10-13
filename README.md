@@ -31,13 +31,9 @@ The **Internet Carbon Tracker** uses a **data-driven approach** to calculate CO2
 ### Example of CO2 Calculation:
 If you transfer **5 GB** of data in a day, the app calculates your emissions as follows:
 
-\[
-\text{CO2 Emissions} = 5 \, \text{GB} \times 0.16 \, \text{grams per GB} = 0.8 \, \text{grams of CO2}
-\]
+**CO2 Emissions** = 5 GB × 0.16 grams/GB = **0.8 grams of CO2**
 
 This approach ensures that your emissions reflect the actual data you've used, providing more accurate insights into your internet-related CO2 footprint.
-
----
 
 ## Installation
 
