@@ -2,10 +2,10 @@
 
 
 a = Analysis(
-    ['co2_tracker.py'],
+    ['SRC\\co2_tracker.py'],
     pathex=[],
     binaries=[],
-    datas=[('app_icon.ico', '.'), ('planet-help-logo2.png', '.')],
+    datas=[('SRC/app_icon.ico', 'SRC'), ('SRC/planet-help-logo2.png', 'SRC')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -29,7 +29,7 @@ exe = EXE(
     upx=True,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=True,
+    console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,

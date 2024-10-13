@@ -183,7 +183,7 @@ def reset_daily_usage_at_midnight():
             db_path = os.path.join(os.path.expanduser('~'), 'Documents', 'CO2_Tracker', 'co2_usage.db')
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
-            cursor.execute('DELETE FROM network_usage')  # Clear the network usage table for the new day
+            cursor.execute('DELETE FROM network_usage WHERE timestamp >= ?', (datetime.datetime.now().strftime('%Y-%m-%d'),))
             conn.commit()
             conn.close()
             
@@ -236,25 +236,33 @@ def update_gui():
     cursor = conn.cursor()
 
     try:
+        # Fetch total and daily usage separately
         cursor.execute('SELECT SUM(data_sent), SUM(data_received), SUM(total_usage), SUM(daily_usage) FROM network_usage')
         result = cursor.fetchone()
         total_sent_mb = result[0] or 0
         total_received_mb = result[1] or 0
         total_usage_mb = result[2] or 0
-        daily_usage = result[3] or 0
+        daily_usage = result[3] or 0  # This is today's CO2 data
 
+        # Total CO2 emissions from total data usage
         total_data_gb = total_usage_mb / 1024
-        total_co2_emissions_data = total_data_gb * CO2_PER_GB * 60
+        total_co2_emissions_data = total_data_gb * CO2_PER_GB
         total_co2_var.set(f"🌿 Total CO2: {format_co2(total_co2_emissions_data)}")
+
+        # Check if today's CO2 should be displayed in grams or kilograms
+        if daily_usage < 1000:
+            todays_grams_var.set(f"🕛 Today's CO2 Emitted: {daily_usage:.2f} grams")
+        else:
+            todays_grams_var.set(f"🕛 Today's CO2 Emitted: {daily_usage / 1000:.2f} kg")
 
         # Calculate the rolling average CO2 usage across the last 10 minutes
         rolling_average = sum(graph_data[-600:]) / min(len(graph_data), 600)
         grams_per_minute_var.set(f"💨 Overall Average CO2 g/hour: {rolling_average:.2f}")
 
+        # Display total data usage
         data_sent_var.set(f"⬆ Data Sent: {format_data_units(total_sent_mb)}")
         data_received_var.set(f"⬇ Data Received: {format_data_units(total_received_mb)}")
         total_data_used_var.set(f"🗂 Total Data Used: {format_data_units(total_usage_mb)}")
-        todays_grams_var.set(f"🕛 Today's CO2 Emitted: {format_co2(daily_usage)}")
 
         # Project yearly CO2 using the average daily usage
         cursor.execute('SELECT start_date FROM start_date')
